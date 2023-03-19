@@ -65,13 +65,5 @@ export class ProductListRecord implements ProductListEntity {
             id: this.id,
         });
     }
-
-    async update(): Promise<void> {
-        await pool.execute('UPDATE `products_lists` SET `name` = :name, `listName` = :listName WHERE `id` = :id', {
-            id: this.id,
-            name: this.name,
-            listId: this.listId,
-        });
-    }
 }
 
