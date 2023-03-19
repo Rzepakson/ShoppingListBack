@@ -3,6 +3,8 @@ import express from "express";
 import 'express-async-errors';
 import {handleError} from "./utils/errors";
 import rateLimit from "express-rate-limit";
+import {listRouter} from "./routers/list";
+import {productListRouter} from "./routers/productList";
 
 
 const app = express();
@@ -16,7 +18,8 @@ app.use(rateLimit({
     max: 100
 }));
 
-// app.use('/')
+app.use('/list', listRouter);
+app.use('/productList', productListRouter);
 
 app.use(handleError);
 

@@ -10,7 +10,7 @@ export class ProductListRecord implements ProductListEntity {
     id?: string;
     name: string;
     count: number;
-    listName: string;
+    listId: string;
 
     constructor(obj: ProductListEntity) {
         if (!obj.name || obj.name.length < 2 || obj.name.length > 20 || typeof obj.name !== 'string') {
@@ -24,11 +24,13 @@ export class ProductListRecord implements ProductListEntity {
         this.id = obj.id;
         this.name = obj.name;
         this.count = obj.count;
-        this.listName = obj.listName;
+        this.listId = obj.listId;
     }
 
-    static async listAll(): Promise<ProductListRecord[]> {
-        const [results] = (await pool.execute('SELECT * FROM `products_lists` ORDER BY `name` ASC')) as ProductRecordResults;
+    static async listAll(listId: string): Promise<ProductListRecord[]> {
+        const [results] = (await pool.execute('SELECT * FROM `products_lists` WHERE `listId` = :listId ORDER BY `name` ASC', {
+            listId,
+        })) as ProductRecordResults;
         return results.map((obj) => new ProductListRecord(obj));
     }
 
@@ -39,15 +41,20 @@ export class ProductListRecord implements ProductListEntity {
         return results.length === 0 ? null : new ProductListRecord(results[0]);
     }
 
-    async insert(): Promise<string> {
+    async insert(listId: string): Promise<string> {
         if (!this.id) {
             this.id = uuid();
         }
 
-        await pool.execute('INSERT INTO `products_lists` VALUES(:id, :name, :count)', {
+        if (!this.listId) {
+            this.listId = listId;
+        }
+
+        await pool.execute('INSERT INTO `products_lists` VALUES(:id, :name, :count, :listId)', {
             id: this.id,
             name: this.name,
             count: this.count,
+            listId: this.listId,
         });
 
         return this.id;
@@ -63,7 +70,7 @@ export class ProductListRecord implements ProductListEntity {
         await pool.execute('UPDATE `products_lists` SET `name` = :name, `listName` = :listName WHERE `id` = :id', {
             id: this.id,
             name: this.name,
-            listName: this.listName,
+            listId: this.listId,
         });
     }
 }

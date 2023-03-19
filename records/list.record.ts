@@ -4,7 +4,7 @@ import {ValidationError} from "../utils/errors";
 import {pool} from "../utils/db";
 import {FieldPacket} from "mysql2";
 
-type ListRecordResults = [ListRecord[], FieldPacket[]];
+export type ListRecordResults = [ListRecord[], FieldPacket[]];
 
 export class ListRecord implements ListEntity {
     id?: string;
@@ -12,7 +12,7 @@ export class ListRecord implements ListEntity {
     createdAt: string;
 
     constructor(obj: ListEntity) {
-        if (!obj.name || obj.name.length < 2 || obj.name.length > 20 || typeof obj.name !== 'string') {
+        if (!obj.name || obj.name.length < 2 || obj.name.length > 20) {
             throw new ValidationError('Nazwa listy musi być tekstem o długości od 2 do 20 znaków');
         }
 
@@ -36,6 +36,10 @@ export class ListRecord implements ListEntity {
     async insert(): Promise<string> {
         if (!this.id) {
             this.id = uuid();
+        }
+
+        if (!this.createdAt) {
+            this.createdAt = new Date().toLocaleString("sv-SE");
         }
 
         await pool.execute('INSERT INTO `lists` VALUES(:id, :name, :createdAt)', {
