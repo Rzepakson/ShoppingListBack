@@ -7,10 +7,13 @@ export const listRouter = Router();
 listRouter
     .get('/', async (req, res) => {
         const listsList = await ListRecord.listAll();
+        res.json(listsList);
+    })
 
-        res.json({
-            listsList,
-        });
+    .get('/:id', async (req, res) => {
+        const oneList = await ListRecord.getOne(req.params.id);
+
+        res.json(oneList);
     })
 
     .post('/', async (req, res) => {
