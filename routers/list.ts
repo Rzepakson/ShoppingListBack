@@ -32,5 +32,5 @@ listRouter
 
         await list.delete();
 
-        res.end();
+        res.json(list);
     });
