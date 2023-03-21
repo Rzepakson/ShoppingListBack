@@ -27,5 +27,5 @@ productListRouter
 
         await productsList.delete();
 
-        res.end();
+        res.json(productsList);
     });
