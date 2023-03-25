@@ -10,21 +10,40 @@ export class ProductListRecord implements ProductListEntity {
     id?: string;
     name: string;
     count: number;
+    unit: string;
     listId: string;
+    numbersAfterComma: number;
 
     constructor(obj: ProductListEntity) {
-        if (!obj.name || obj.name.length < 2 || obj.name.length > 20 || typeof obj.name !== 'string') {
+
+        if (!obj.name || obj.name.length < 2 || obj.name.length > 20 || Number(obj.name)) {
             throw new ValidationError('Nazwa produktu musi być tekstem, którego długość wynosi od 2 do 20 znaków.');
         }
 
-        if (!obj.count || obj.count < 0 || obj.count > 99 || typeof obj.count !== 'number') {
+        if (obj.unit === 'szt' && obj.count % 1 !== 0) {
+            throw new ValidationError('Jeśli podajesz ilość w sztukach to musisz podać liczbę całkowitą (bez przecinków).')
+        }
+
+        if (!obj.count || typeof obj.count !== 'number') {
+            throw new ValidationError('Ilość produktów musi być liczbą!');
+        }
+
+        if ((obj.unit === 'szt' && obj.count < 1) || obj.count > 99) {
             throw new ValidationError('Liczba produktów musi być liczbą pomiędzy 1, a 99.');
+        } else if (obj.count <= 0) {
+            throw new ValidationError('Waga produktów musi być liczbą większą od 0 i mniejszą od 99.');
+        }
+
+        if (obj.numbersAfterComma > 2) {
+            throw new ValidationError('Podana waga może zawierać maksymalnie dwie liczby po przecinku.');
         }
 
         this.id = obj.id;
         this.name = obj.name;
         this.count = obj.count;
+        this.unit = obj.unit;
         this.listId = obj.listId;
+        this.numbersAfterComma = obj.numbersAfterComma;
     }
 
     static async listAll(listId: string): Promise<ProductListRecord[]> {
@@ -42,6 +61,7 @@ export class ProductListRecord implements ProductListEntity {
     }
 
     async insert(listId: string): Promise<string> {
+
         if (!this.id) {
             this.id = uuid();
         }
@@ -50,10 +70,11 @@ export class ProductListRecord implements ProductListEntity {
             this.listId = listId;
         }
 
-        await pool.execute('INSERT INTO `products_lists` VALUES(:id, :name, :count, :listId)', {
+        await pool.execute('INSERT INTO `products_lists` VALUES(:id, :name, :count, :unit, :listId)', {
             id: this.id,
             name: this.name,
             count: this.count,
+            unit: this.unit,
             listId: this.listId,
         });
 

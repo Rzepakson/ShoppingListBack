@@ -8,6 +8,10 @@ productListRouter
     .get('/:listId', async (req, res) => {
         const productsList = await ProductListRecord.listAll(req.params.listId);
 
+        if (!productsList) {
+            throw new ValidationError('Nie ma takiej listy!');
+        }
+
         res.json(productsList);
     })
 
@@ -22,7 +26,7 @@ productListRouter
         const productsList = await ProductListRecord.getOne(req.params.id);
 
         if (!productsList) {
-            throw new ValidationError('No such product!');
+            throw new ValidationError('Produkt, który chcesz usunąć nie istnieje!');
         }
 
         await productsList.delete();
