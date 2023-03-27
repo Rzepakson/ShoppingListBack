@@ -1,6 +1,6 @@
 {
   "name": "shopping-list-back",
-  "version": "0.3.3",
+  "version": "0.3.4",
   "description": "This is backend application and API for shopping list.",
   "main": "index.ts",
   "scripts": {

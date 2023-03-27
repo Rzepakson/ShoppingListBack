@@ -1,16 +1,12 @@
 import {Router} from "express";
 import {ProductListRecord} from "../records/productList.record";
-import {ValidationError} from "../utils/errors";
+import {NotFoundError} from "../utils/errors";
 
 export const productListRouter = Router();
 
 productListRouter
     .get('/:listId', async (req, res) => {
         const productsList = await ProductListRecord.listAll(req.params.listId);
-
-        if (!productsList) {
-            throw new ValidationError('Nie ma takiej listy!');
-        }
 
         res.json(productsList);
     })
@@ -26,7 +22,7 @@ productListRouter
         const productsList = await ProductListRecord.getOne(req.params.id);
 
         if (!productsList) {
-            throw new ValidationError('Produkt, który chcesz usunąć nie istnieje!');
+            throw new NotFoundError('Produkt, który chcesz usunąć nie istnieje!');
         }
 
         await productsList.delete();
