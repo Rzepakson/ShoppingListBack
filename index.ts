@@ -14,7 +14,6 @@ app.use(cors({
     origin: config.corsOrigin,
 }));
 app.use(json());
-app.use(express.json());
 app.use(rateLimit({
     windowMs: 5 * 60 * 1000,
     max: 100
@@ -30,6 +29,6 @@ router.use('/productList', productListRouter);
 app.use(handleError);
 app.use(handleNotFoundError);
 
-app.listen(3001, 'localhost', () => {
+app.listen(3001, '0.0.0.0', () => {
     console.log('Listening on http://localhost:3001');
 });

@@ -2,7 +2,7 @@
   "name": "shopping-list-back",
   "version": "1.0.0",
   "description": "This is backend application and API for shopping list.",
-  "main": "index.ts",
+  "main": "index.js",
   "scripts": {
     "start": "ts-node index.ts",
     "start:dev": "tsnd index.ts",
