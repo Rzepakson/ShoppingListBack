@@ -1,25 +1,31 @@
 import cors from "cors";
-import express from "express";
+import express, {json, Router} from "express";
 import 'express-async-errors';
 import {handleError, handleNotFoundError} from "./utils/errors";
 import rateLimit from "express-rate-limit";
 import {listRouter} from "./routers/list";
 import {productListRouter} from "./routers/productList";
+import {config} from "./config/config";
 
 
 const app = express();
 
 app.use(cors({
-    origin: 'http://localhost:3000',
+    origin: config.corsOrigin,
 }));
+app.use(json());
 app.use(express.json());
 app.use(rateLimit({
     windowMs: 5 * 60 * 1000,
     max: 100
 }));
 
-app.use('/list', listRouter);
-app.use('/productList', productListRouter);
+const router = Router();
+
+app.use('/api', router);
+
+router.use('/list', listRouter);
+router.use('/productList', productListRouter);
 
 app.use(handleError);
 app.use(handleNotFoundError);
