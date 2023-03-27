@@ -21,10 +21,10 @@ app.use(rateLimit({
 
 const router = Router();
 
-app.use('/api', router);
-
 router.use('/list', listRouter);
 router.use('/productList', productListRouter);
+
+app.use('/api', router);
 
 app.use(handleError);
 app.use(handleNotFoundError);
