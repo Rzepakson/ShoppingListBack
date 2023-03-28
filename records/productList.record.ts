@@ -20,26 +20,30 @@ export class ProductListRecord implements ProductListEntity {
             throw new ValidationError('Formularz musi być wypełniony w całości!');
         }
 
-        if (obj.name.length < 2 || obj.name.length > 20) {
-            throw new ValidationError('Nazwa produktu musi być tekstem, którego długość wynosi od 2 do 20 znaków.');
+        if (!((Number(obj.name)) <= 0 || !(Number(obj.name) >= 0))) {
+            throw new ValidationError('Nazwa produktu nie może być liczbą!');
         }
 
-        if (obj.unit === 'szt' && obj.count % 1 !== 0) {
-            throw new ValidationError('Jeśli podajesz ilość w sztukach to musisz podać liczbę całkowitą (bez przecinków).')
+        if (obj.name.length < 2 || obj.name.length > 20) {
+            throw new ValidationError('Nazwa produktu musi być tekstem, którego długość wynosi od 2 do 20 znaków!');
         }
 
         if (typeof obj.count !== 'number') {
             throw new ValidationError('Ilość produktów musi być liczbą!');
         }
 
+        if (obj.unit === 'szt' && obj.count % 1 !== 0) {
+            throw new ValidationError('Jeśli podajesz ilość w sztukach to musisz podać liczbę całkowitą (bez przecinków)!')
+        }
+
         if (obj.unit === 'szt' && obj.count < 1 || obj.count > 99) {
-            throw new ValidationError('Liczba produktów musi być liczbą pomiędzy 1, a 99.');
+            throw new ValidationError('Liczba produktów musi być liczbą pomiędzy 1, a 99!');
         } else if (obj.count <= 0) {
-            throw new ValidationError('Waga produktów musi być liczbą większą od 0 i mniejszą od 99.');
+            throw new ValidationError('Waga produktów musi być liczbą większą od 0 i mniejszą od 99!');
         }
 
         if (obj.numbersAfterComma > 2) {
-            throw new ValidationError('Podana waga może zawierać maksymalnie dwie liczby po przecinku.');
+            throw new ValidationError('Podana waga może zawierać maksymalnie dwie liczby po przecinku!');
         }
 
         this.id = obj.id;
