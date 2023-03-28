@@ -12,8 +12,17 @@ export class ListRecord implements ListEntity {
     createdAt: string;
 
     constructor(obj: ListEntity) {
-        if (!obj.name || obj.name.length < 2 || obj.name.length > 20) {
-            throw new ValidationError('Nazwa listy musi być tekstem o długości od 2 do 20 znaków.');
+
+        if (!obj.name) {
+            throw new ValidationError('Nazwa listy nie może być pusta!');
+        }
+
+        if (!((Number(obj.name)) <= 0 || !(Number(obj.name) >= 0))) {
+            throw new ValidationError('Nazwa listy nie może być liczbą!');
+        }
+
+        if (obj.name.length < 2 || obj.name.length > 20) {
+            throw new ValidationError('Nazwa listy musi mieć długość od 2 do 20 znaków!');
         }
 
         this.id = obj.id;
