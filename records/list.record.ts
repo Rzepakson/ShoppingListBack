@@ -10,6 +10,7 @@ export class ListRecord implements ListEntity {
     id?: string;
     name: string;
     createdAt: string;
+    userId: string;
 
     constructor(obj: ListEntity) {
 
@@ -28,10 +29,13 @@ export class ListRecord implements ListEntity {
         this.id = obj.id;
         this.name = obj.name;
         this.createdAt = obj.createdAt;
+        this.userId = obj.userId;
     }
 
-    static async listAll(): Promise<ListRecord[]> {
-        const [results] = (await pool.execute('SELECT * FROM `lists` ORDER BY `name` ASC')) as ListRecordResults;
+    static async listAll(userId: string): Promise<ListRecord[]> {
+        const [results] = (await pool.execute('SELECT * FROM `lists` WHERE `userId` = :userId ORDER BY `name` ASC', {
+            userId,
+        })) as ListRecordResults;
         return results.map((obj) => new ListRecord(obj));
     }
 
@@ -42,7 +46,7 @@ export class ListRecord implements ListEntity {
         return results.length === 0 ? null : new ListRecord(results[0]);
     }
 
-    async insert(): Promise<string> {
+    async insert(userId: string): Promise<void> {
         if (!this.id) {
             this.id = uuid();
         }
@@ -51,13 +55,12 @@ export class ListRecord implements ListEntity {
             this.createdAt = new Date().toLocaleString("sv-SE");
         }
 
-        await pool.execute('INSERT INTO `lists` VALUES(:id, :name, :createdAt)', {
+        await pool.execute('INSERT INTO `lists` VALUES(:id, :name, :createdAt, :userId)', {
             id: this.id,
             name: this.name,
             createdAt: this.createdAt,
+            userId,
         });
-
-        return this.id;
     }
 
     async delete(): Promise<void> {

@@ -68,7 +68,7 @@ export class ProductListRecord implements ProductListEntity {
         return results.length === 0 ? null : new ProductListRecord(results[0]);
     }
 
-    async insert(listId: string): Promise<string> {
+    async insert(listId: string): Promise<void> {
 
         if (!this.id) {
             this.id = uuid();
@@ -85,8 +85,6 @@ export class ProductListRecord implements ProductListEntity {
             unit: this.unit,
             listId: this.listId,
         });
-
-        return this.id;
     }
 
     async delete(): Promise<void> {

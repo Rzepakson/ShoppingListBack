@@ -7,6 +7,7 @@ productListRouter
     .get('/:listId', async (req, res) => {
         const productsList = await ProductListRecord.listAll(req.params.listId);
 
+        res.status(200);
         res.json(productsList);
     })
 
@@ -14,6 +15,7 @@ productListRouter
         const newProduct = new ProductListRecord(req.body);
         await newProduct.insert(req.params.listId);
 
+        res.status(201);
         res.json(newProduct);
     })
 
@@ -21,5 +23,6 @@ productListRouter
         const productsList = await ProductListRecord.getOne(req.params.id);
         await productsList.delete();
 
+        res.status(204);
         res.json(productsList);
     });
