@@ -6,6 +6,7 @@ import rateLimit from "express-rate-limit";
 import {listRouter} from "./routers/list";
 import {productListRouter} from "./routers/productList";
 import {config} from "./config/config";
+import {userRouter} from "./routers/user";
 
 
 const app = express();
@@ -21,6 +22,7 @@ app.use(rateLimit({
 
 const router = Router();
 
+router.use('/user', userRouter);
 router.use('/list', listRouter);
 router.use('/productList', productListRouter);
 
