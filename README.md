@@ -15,7 +15,7 @@ This app is backend and API to the frontend Zakupsy app [which is here](https://
 - project routes are divided into 3 routers
 - project shares types with frontend
 - used database is mysql
-- toll for manage database is phpMyAdmin
+- tool for manage database is phpMyAdmin
 - database has 3 tables - each table represents one record
 - database relation type is one to many
 - ids are created by uuid package
