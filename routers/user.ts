@@ -22,7 +22,7 @@ userRouter
 
         if (await compare(req.body.password, oneUser.password)) {
             res.status(200);
-            res.json(oneUser);
+            res.json(oneUser.id);
         } else {
             res.status(401);
             throw new ValidationError('Podano złe hasło!');

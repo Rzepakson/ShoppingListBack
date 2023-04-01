@@ -23,6 +23,6 @@ productListRouter
         const productsList = await ProductListRecord.getOne(req.params.id);
         await productsList.delete();
 
-        res.status(204);
+        res.status(200);
         res.json(productsList);
     });

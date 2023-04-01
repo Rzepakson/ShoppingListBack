@@ -11,7 +11,7 @@ listRouter
         res.json(listsList);
     })
 
-    .get('/:listId', async (req, res) => {
+    .get('/oneList/:listId', async (req, res) => {
         const oneList = await ListRecord.getOne(req.params.listId);
 
         res.status(200);
@@ -30,6 +30,6 @@ listRouter
         const list = await ListRecord.getOne(req.params.listId);
         await list.delete();
 
-        res.status(204);
+        res.status(200);
         res.json(list);
     });
